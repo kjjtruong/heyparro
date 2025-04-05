@@ -1,0 +1,168 @@
+---
+import heyParroLogo from "../assets/heyparro.svg";
+import sampleAudio from "../assets/crestmont_onhold.mp3";
+---
+
+<div id="container" class="max-w-7xl mx-auto">
+  <main>
+    <section id="hero" class="max-w-4xl px-8 pt-32">
+      <a href="https://astro.build"
+        ><img
+          src={heyParroLogo.src}
+          width="115"
+          height="48"
+          alt="HeyParro Homepage"
+        /></a
+      >
+      <h1 class="text-6xl font-bold mb-8 mt-8">
+        Your Waiting Room Shouldn't Sound Like One.
+      </h1>
+      <p class="text-3xl mb-8">
+        Professional OnHold AI voice messages that transform hold time into a
+        positive patient experience.
+      </p>
+      <section id="links">
+        <a
+          class="px-6 py-4 bg-[#ff4ad7] text-white text-lg rounded-full hover:bg-[#ff4ad7]/80 transition-colors"
+          href="mailto:hello@heyparro.com">Book a Call</a
+        >
+        <button
+          class="px-6 py-4 border-2 border-[#ff4ad7] text-[#ff4ad7] text-lg rounded-full hover:cursor-pointer hover:bg-[#ff4ad7]/80 hover:text-white transition-colors flex items-center gap-2"
+          id="audioButton"
+        >
+          <span id="buttonText">Play Sample</span>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="currentColor"
+            id="playIcon"
+          >
+            <path
+              d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z"
+            ></path>
+          </svg>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="currentColor"
+            id="pauseIcon"
+            class="hidden"
+          >
+            <path d="M6 4h4v16H6V4zm8 0h4v16h-4V4z"></path>
+          </svg>
+        </button>
+
+        <audio id="sampleAudio" src={sampleAudio}></audio>
+
+        <script is:inline>
+          let isPlaying = false;
+          const audio = document.getElementById("sampleAudio");
+          const button = document.getElementById("audioButton");
+          const buttonText = document.getElementById("buttonText");
+          const playIcon = document.getElementById("playIcon");
+          const pauseIcon = document.getElementById("pauseIcon");
+
+          if (audio) {
+            audio.addEventListener("error", (e) => {
+              console.error("Audio loading error:", e);
+              if (buttonText) buttonText.textContent = "Error loading audio";
+            });
+          }
+
+          function toggleAudio() {
+            if (!audio || !buttonText || !playIcon || !pauseIcon) return;
+
+            if (isPlaying) {
+              audio.pause();
+              buttonText.textContent = "Play Sample";
+              playIcon.classList.remove("hidden");
+              pauseIcon.classList.add("hidden");
+            } else {
+              audio.play().catch((error) => {
+                console.error("Error playing audio:", error);
+                buttonText.textContent = "Error playing audio";
+              });
+              buttonText.textContent = "Pause";
+              playIcon.classList.add("hidden");
+              pauseIcon.classList.remove("hidden");
+            }
+            isPlaying = !isPlaying;
+          }
+
+          if (audio) {
+            audio.onended = function () {
+              isPlaying = false;
+              if (buttonText) buttonText.textContent = "Play Sample";
+              if (playIcon) playIcon.classList.remove("hidden");
+              if (pauseIcon) pauseIcon.classList.add("hidden");
+            };
+          }
+
+          // Add click event listener to button
+          button?.addEventListener("click", toggleAudio);
+        </script>
+      </section>
+    </section>
+  </main>
+</div>
+
+<style>
+  #container {
+    font-family: Inter, Roboto, "Helvetica Neue", "Arial Nova", "Nimbus Sans",
+      Arial, sans-serif;
+    height: 100%;
+  }
+
+  main {
+    height: 100%;
+    display: flex;
+  }
+
+  #hero {
+    display: flex;
+    align-items: start;
+    flex-direction: column;
+    justify-content: top;
+  }
+
+  #links {
+    display: flex;
+    gap: 16px;
+  }
+
+  #links a {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  #links a svg {
+    height: 1em;
+    margin-left: 8px;
+  }
+
+  @media screen and (max-width: 768px) {
+    #container {
+      display: flex;
+      flex-direction: column;
+    }
+
+    #hero {
+      display: block;
+      padding-top: 10%;
+    }
+
+    #links {
+      flex-wrap: wrap;
+    }
+
+    #links a.button {
+      padding: 14px 18px;
+    }
+  }
+</style>
