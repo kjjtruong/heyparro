@@ -8,5 +8,5 @@ export default defineConfig({
     plugins: [tailwindcss()],
   },
 
-  integrations: [yeskunallumami()],
+  integrations: [yeskunallumami({id: "93794742-c5c3-44dc-aa94-c34d8f0132f8"})],
 });
